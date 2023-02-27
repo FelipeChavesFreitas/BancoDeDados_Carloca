@@ -35,7 +35,7 @@ CREATE TABLE `locacao` (
   KEY `ID_CLIENTE` (`ID_CLIENTE`),
   CONSTRAINT `ID_CARRO` FOREIGN KEY (`ID_CARRO`) REFERENCES `carro` (`ID`),
   CONSTRAINT `ID_CLIENTE` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `cliente` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `locacao` (
 
 LOCK TABLES `locacao` WRITE;
 /*!40000 ALTER TABLE `locacao` DISABLE KEYS */;
-INSERT INTO `locacao` VALUES (1,1,1,'SP','2023-02-20','Diária','Em andamento'),(2,2,2,'MG','2022-01-24','Diária','Em andamento'),(3,3,3,'RJ','2014-12-10','Diária','Encerrado'),(4,3,4,'MS','2018-10-31','Diária','Em andamento'),(5,6,5,'PE','2015-05-24','Diária','Encerrado');
+INSERT INTO `locacao` VALUES (1,1,1,'SP','2023-02-20','Diária','Em andamento'),(2,2,2,'MG','2022-01-24','Diária','Em andamento'),(3,3,3,'RJ','2014-12-10','Diária','Encerrado'),(4,3,4,'MS','2018-10-31','Diária','Em andamento'),(5,6,5,'PE','2015-05-24','Diária','Encerrado'),(6,4,6,'SP','2015-07-14','Diária','Encerrado');
 /*!40000 ALTER TABLE `locacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -252,4 +252,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-25 23:23:00
+-- Dump completed on 2023-02-27 11:25:22

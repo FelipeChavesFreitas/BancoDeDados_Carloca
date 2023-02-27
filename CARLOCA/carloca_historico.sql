@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `historico`;
 CREATE TABLE `historico` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `ID_LOCAÇÃO` int NOT NULL,
+  `ID_CLIENTE` int NOT NULL,
   `DATA_LOCAÇÃO` date NOT NULL,
   `LOCAL_LOCAÇÃO` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `DATA_DEVOLUÇÃO` date NOT NULL,
@@ -33,8 +34,10 @@ CREATE TABLE `historico` (
   `KM_FINAL_CARRO` int NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `historico_FK` (`ID_LOCAÇÃO`),
-  CONSTRAINT `historico_FK` FOREIGN KEY (`ID_LOCAÇÃO`) REFERENCES `locacao` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `historico_FK_1` (`ID_CLIENTE`),
+  CONSTRAINT `historico_FK` FOREIGN KEY (`ID_LOCAÇÃO`) REFERENCES `locacao` (`ID`),
+  CONSTRAINT `historico_FK_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `cliente` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,35 +46,9 @@ CREATE TABLE `historico` (
 
 LOCK TABLES `historico` WRITE;
 /*!40000 ALTER TABLE `historico` DISABLE KEYS */;
-INSERT INTO `historico` VALUES (1,3,'2014-12-10','RJ','2015-12-10','RJ',12,30),(2,5,'2015-05-24','PE','2016-05-24','SP',30,34);
+INSERT INTO `historico` VALUES (1,3,3,'2014-12-10','RJ','2015-12-10','RJ',12,30),(2,5,5,'2015-05-24','PE','2016-05-24','SP',30,34),(3,6,6,'2015-07-14','SP','2016-07-14','SP',10,40);
 /*!40000 ALTER TABLE `historico` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `LOCK_INSERTS` BEFORE INSERT ON `historico` FOR EACH ROW BEGIN 
-	DECLARE local_locacao VARCHAR(100);
-	DECLARE data_locacao DATE;
-	SELECT DATA INTO data_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
-	IF(NEW.DATA_LOCAÇÃO != data_locacao) THEN
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data de locação não está compativel com a que está na locação';
-	END IF;
-	SELECT ENDEREÇO_LOCAÇÃO INTO local_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
-	IF(NEW.LOCAL_LOCAÇÃO != local_locacao) THEN
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O local de locação não está compativel com o que está na locação';
-	END IF;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -163,6 +140,37 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `LOCK_INSERTS` BEFORE INSERT ON `historico` FOR EACH ROW BEGIN 
+	DECLARE cliente_locacao INT;
+	DECLARE local_locacao VARCHAR(100);
+	DECLARE data_locacao DATE;
+	SELECT ID_CLIENTE INTO cliente_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.ID_CLIENTE != cliente_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id cliente não está compativel com a que está na locação';
+	END IF;
+	SELECT DATA INTO data_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.DATA_LOCAÇÃO != data_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data de locação não está compativel com a que está na locação';
+	END IF;
+	SELECT ENDEREÇO_LOCAÇÃO INTO local_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.LOCAL_LOCAÇÃO != local_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O local de locação não está compativel com o que está na locação';
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `SET_ENCERRAMENTO` AFTER INSERT ON `historico` FOR EACH ROW UPDATE LOCACAO SET STATUS = 'Encerrado' WHERE NEW.ID_LOCAÇÃO = LOCACAO.ID */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -180,32 +188,6 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `UPDATE_KM_TOTAL_CARRO` AFTER INSERT ON `historico` FOR EACH ROW BEGIN 
 UPDATE CARRO SET KM_TOTAL = NEW.KM_FINAL_CARRO WHERE carloca.CARRO.ID = (SELECT ID_CARRO FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO); 
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `LOCK_INSERTS_UPDATE` BEFORE UPDATE ON `historico` FOR EACH ROW BEGIN 
-	DECLARE local_locacao VARCHAR(100);
-	DECLARE data_locacao DATE;
-	SELECT DATA INTO data_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
-	IF(NEW.DATA_LOCAÇÃO != data_locacao) THEN
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data de locação não está compativel com a que está na locação';
-	END IF;
-	SELECT ENDEREÇO_LOCAÇÃO INTO local_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
-	IF(NEW.LOCAL_LOCAÇÃO != local_locacao) THEN
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O local de locação não está compativel com o que está na locação';
-	END IF;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -301,6 +283,37 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `LOCK_INSERTS_UPDATE` BEFORE UPDATE ON `historico` FOR EACH ROW BEGIN 
+	DECLARE cliente_locacao INT;
+	DECLARE local_locacao VARCHAR(100);
+	DECLARE data_locacao DATE;
+	SELECT ID_CLIENTE INTO cliente_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.ID_CLIENTE != cliente_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Id cliente não está compativel com a que está na locação';
+	END IF;
+	SELECT DATA INTO data_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.DATA_LOCAÇÃO != data_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data de locação não está compativel com a que está na locação';
+	END IF;
+	SELECT ENDEREÇO_LOCAÇÃO INTO local_locacao FROM LOCACAO WHERE carloca.LOCACAO.ID = NEW.ID_LOCAÇÃO;
+	IF(NEW.LOCAL_LOCAÇÃO != local_locacao) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O local de locação não está compativel com o que está na locação';
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`felipe`@`%`*/ /*!50003 TRIGGER `SET_ENCERRAMENTO_UPDATE` AFTER UPDATE ON `historico` FOR EACH ROW UPDATE LOCACAO SET STATUS = 'Encerrado' WHERE NEW.ID_LOCAÇÃO = LOCACAO.ID */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -317,4 +330,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-25 23:23:01
+-- Dump completed on 2023-02-27 11:25:21

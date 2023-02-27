@@ -46,7 +46,7 @@ CREATE TABLE `carro` (
 
 LOCK TABLES `carro` WRITE;
 /*!40000 ALTER TABLE `carro` DISABLE KEYS */;
-INSERT INTO `carro` VALUES (1,1,4,'CARRINHO','Prata','1','Manual',32,'Indisponível'),(2,3,2,'CARROZITO','Branco','2.5','Automático',12,'Indisponível'),(3,1,3,'PICAPE X','Preto','1','Manual',30,'Indisponível'),(4,5,1,'CARRÃO','Preto','2.5','Automático',10,'Disponível'),(5,2,5,'CRUZE','Prata','1.5','Manual',20,'Disponível'),(6,4,6,'CAR','Branco','3.6','Automático',34,'Disponível');
+INSERT INTO `carro` VALUES (1,1,4,'CARRINHO','Prata','1','Manual',32,'Indisponível'),(2,3,2,'CARROZITO','Branco','2.5','Automático',12,'Indisponível'),(3,1,3,'PICAPE X','Preto','1','Manual',30,'Indisponível'),(4,5,1,'CARRÃO','Preto','2.5','Automático',40,'Disponível'),(5,2,5,'CRUZE','Prata','1.5','Manual',20,'Disponível'),(6,4,6,'CAR','Branco','3.6','Automático',34,'Disponível');
 /*!40000 ALTER TABLE `carro` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -78,4 +78,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-25 23:23:01
+-- Dump completed on 2023-02-27 11:25:21
